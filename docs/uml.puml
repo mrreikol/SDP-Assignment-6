@@ -1,0 +1,54 @@
+@startuml
+interface Element {
+  getName(): String
+  getChildren(): List<Element>
+  accept(visitor: Visitor)
+}
+abstract class Node {
+  -name: String
+  -parent: DirectoryNode
+}
+class FileNode {
+  -size: long
+  getSize(): long
+  accept(visitor: Visitor)
+}
+class DirectoryNode {
+  -children: List<Element>
+  add(child: Node)
+  accept(visitor: Visitor)
+}
+interface Visitor {
+  reset()
+  enter(path: String, depth: int)
+  visit(file: FileNode)
+  visit(directory: DirectoryNode)
+}
+class TotalSizeVisitor {
+  -totalSize: long
+  getTotalSize(): long
+}
+class SearchVisitor {
+  -nameCriterion: Predicate<String>
+  -minimumSize: long
+  getMatches(): List<String>
+}
+class StatisticsVisitor {
+  -fileCount: int
+  -directoryCount: int
+  -maximumDepth: int
+}
+class FileSystemWalker {
+  walk(root: Element, visitor: Visitor)
+}
+Element <|.. Node
+Node <|-- FileNode
+Node <|-- DirectoryNode
+DirectoryNode "0..1" *-- "0..*" Element : children
+Visitor <|.. TotalSizeVisitor
+Visitor <|.. SearchVisitor
+Visitor <|.. StatisticsVisitor
+Element ..> Visitor : accept
+FileSystemWalker ..> Element
+FileSystemWalker ..> Visitor
+@enduml

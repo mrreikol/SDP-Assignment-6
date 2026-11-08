@@ -1,0 +1,7 @@
+Total size: 3118 bytes
+Search: name contains notes, size >= 350 bytes
+documents/archive/old-notes.txt
+documents/notes.txt
+Files: 4
+Directories: 4
+Maximum depth: 3
